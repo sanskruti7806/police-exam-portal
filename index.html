@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Police Recruitment Exam Portal</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #eef2f7;
+      text-align: center;
+    }
+
+    h2 {
+      color: #1a237e;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    input {
+      padding: 10px;
+      margin: 8px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #1a237e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      margin-top: 30px;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: left;
+      width: 350px;
+    }
+
+    .title {
+      font-weight: bold;
+      color: #0d47a1;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>State Police Recruitment Board</h2>
+    <h3>Candidate Login Portal</h3>
+
+    <form id="loginForm">
+      <input type="text" id="id" placeholder="Enter Candidate ID" required><br>
+      <input type="password" id="password" placeholder="Enter Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const id = document.getElementById("id").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ id, password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("result").innerHTML = `
+          <div class="card">
+            <p class="title">Candidate Details</p>
+            <p><b>Name:</b> ${data.name}</p>
+            <p><b>Seat No:</b> ${data.seat_no}</p>
+            <p><b>DOB:</b> ${data.dob}</p>
+            <p><b>Exam Date:</b> ${data.exam_date}</p>
+
+            <hr>
+
+            <p class="title">Exam Center</p>
+            <p><b>Center:</b> ${data.center_name}</p>
+            <p><b>Address:</b> ${data.address}</p>
+            <p><b>Timing:</b> ${data.timing}</p>
+
+            <a href="${data.map_link}" target="_blank">📍 View Location</a><br><br>
+
+            <button onclick="location.reload()">Logout</button>
+          </div>
+        `;
+      } else {
+        document.getElementById("result").innerHTML =
+          "<p class='error'>Invalid ID or Password</p>";
+      }
+    });
+  </script>
+
+</body>
+</html>

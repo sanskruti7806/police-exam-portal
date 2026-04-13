@@ -1,0 +1,12 @@
+{
+  "name": "police-exam-portal",
+  "version": "1.0.0",
+  "description": "Police Exam Center Finder",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
